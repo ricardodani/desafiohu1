@@ -7,9 +7,8 @@ services
     });
 })
 .factory('Hotel', function($resource) {
-    return $resource('http://localhost:5000/api/v1/hotel', {cityId: '@cityId', 
-                                                            enterDate: '@enterDate',
-                                                            exitDate: '@exitDate'}, {
+    return $resource('http://localhost:5000/api/v1/hotel', {
+        enterDate: '@enterDate', exitDate: '@exitDate', undefinedDate: '@undefinedDate'}, {
         query: { method: 'GET', isArray: true}
     });
 });
@@ -26,17 +25,20 @@ myApp.config(function($routeProvider) {
 myApp.controller(
     'mainController',
     function ($scope, Places, Hotel) {
-        $scope.placesSearch = function() {
-            if ($scope.searchString > 1) {
-                $scope.place_suggestions = Places.query({ searchString: $scope.searchString });
+        $scope.places = function() {
+            searchString = $scope.searchString;
+            if (searchString.length > 1) {
+                $scope.places_results = Places.query({
+                    searchString: searchString
+                });
             }
         };
-        $scope.hotelSearch = function() {
+        $scope.hotels = function() {
             if ($scope.enterDate && $scope.exitDate) {
                 $scope.hotel_results = Hotel.query({
-                    cityId: $scope.cityId,
                     enterDate: $scope.enterDate,
-                    exitDate: $scope.exitDate
+                    exitDate: $scope.exitDate,
+                    undefinedDate: $scope.undefinedDate
                 });
             }
         };

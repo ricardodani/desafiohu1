@@ -6,7 +6,15 @@
             <label for="local_search">Quer ficar onde?</label>
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa-map-marker fa"></i></span>
-                <input type="text" class="form-control" id="local_search" ng-model="searchString" placeholder='Cidade ou hotel' ng-change="placesSearch()"/>
+                <input type="text" class="form-control" id="local_search" ng-model="searchString" placeholder='Cidade ou hotel' ng-change="places()"/>
+                <div class="popover bottom" ng-show="places_results.length">
+                    <div class="arrow"></div>
+                    <div class="popover-content">
+                        <ul ng-repeat="result in places_results">
+                            <li>{{ result.name }}</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </span>
         <span class="col-xs-7">
@@ -15,31 +23,31 @@
                 <span class="col-xs-6">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa-calendar fa"></i></span>
-                        <input type="text" class="form-control" id="enter_date" ng-model="enterDate" placeholder='entrada' ng-change="hotelSearch()"/>
+                        <input type="text" class="form-control" id="enter_date" ng-model="enterDate" placeholder='entrada'/>
                     </div>
                 </span>
                 <span class="col-xs-6">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa-calendar fa"></i></span>
-                        <input type="text" class="form-control" id="exit_date" ng-model="exitDate" placeholder='saída' ng-change="hotelSearch()"/>
+                        <input type="text" class="form-control" id="exit_date" ng-model="exitDate" placeholder='saída'/>
                     </div>
                 </span>
                 <span class="col-xs-12">
                     <p>
-                        <input type="checkbox" ng-model="undefinedDate" ng-change="hotelSearch()" /> Ainda não defini as datas
+                        <input type="checkbox" ng-model="undefinedDate" /> Ainda não defini as datas
                     </p>
                 </span>
             </div>
         </span>
         <span class="col-xs-12 button">
-            <button ng-click="hotelSearch()"><i class="fa fa-search"></i> Buscar</button>
+            <button ng-click="hotels()"><i class="fa fa-search"></i> Buscar</button>
         </span>
     </div>
 </div>
 
 <div class="clearfix"></div>
 
-<table class="hotels_list" class="table table-striped table-condensed">
+<table class="hotels_list table table-striped table-condensed">
     <thead>
     <tr>
         <th>Hotel</th><th>Cidade</th><th>Disponibilidade</th>
@@ -47,9 +55,9 @@
     </thead>
     <tbody>
     <tr ng-repeat="result in hotel_results">
-        <td>{{ result.hotel }}</td>
+        <td>{{ result.name }}</td>
         <td>{{ result.city }}</td>
-        <td>{{ result.disponibilities }}</td>
+        <td>{{ result.available_days }}</td>
     </tr>
     </tbody>
 </table>

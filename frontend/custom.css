@@ -45,8 +45,10 @@
 .hotels_form label {
     color: #666;
 }
-.hotels_form input:before {
-
+.hotels_form .popover {
+    display: block;
+    width: 100%;
+    top: 36px;
 }
 .hotels_form .button {
     padding: 30px 15px 15px 15px;
