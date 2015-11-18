@@ -8,10 +8,10 @@ A interface em anexo precisa ser implementada assim como o backend para consumir
 * Eu preciso conseguir rodar seu código no mac os x OU no ubuntu;
 * Eu vou executar seu código com os seguintes comandos:
 
->1. *git clone seu-fork*
-2. *cd seu-fork*
-3. *comando para instalar dependências*
-4. *comando para executar a aplicação*
+1. git clone http://github.com/ricardodani/desafiohu1
+2. cd desafiohu1
+3. make setup
+4. make run
 
 Esses comandos tem que ser o suficiente para configurar meu mac os x OU ubuntu e rodar seu programa. Pode considerar que eu tenho instalado no meu sistema Python, Java, PHP, Ruby e/ou Node. Qualquer outra dependência que eu precisar vc tem que prover.
 
