@@ -52,6 +52,29 @@ class HotelAvailability(ESResource):
                 }
             }
         }
+        # GET desafiohu1/disp/_search
+        # {
+        # "query": {
+        #     "filtered": {
+        #     "filter": {
+        #         "bool": {
+        #         "must": [
+        #             {
+        #                 "term": {
+        #                 "city_id": ["AVEjnt8sJTFSUzSrG34f"]
+        #                 }
+        #             },
+        #             {
+        #                 "term": {
+        #                 "dates": ["3/5/2015", "4/5/2015", "5/5/2015", "6/5/2015", "7/5/2015", "8/5/2015"]
+        #                 }
+        #             }
+        #         ]
+        #         }
+        #     }
+        #     }
+        # }
+        # }
         resp = requests.post(self.url, data=json.dumps(query))
         return self.handle_result(resp.json())
 api.add_resource(HotelAvailability, config.base_url+'hotel')

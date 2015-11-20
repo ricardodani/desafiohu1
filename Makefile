@@ -1,3 +1,6 @@
+setup::
+	@pip install -r requirements
+
 dev_server::
 	@python backend/__init__.py
 
