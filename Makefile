@@ -1,26 +1,14 @@
+dev_server::
+	python backend/__init__.py
 
-.PHONY=help
-help::
-	@echo "Install virtualenv and dependencies first (see README)"
-	@echo ""
-	@echo "Then run:"
-	@echo "make index #(re)create Elasticsearch index"
-	@echo "make backend #Run backend service on http://localhost:5000"
-	@echo "make frontend #Run frontend service on http://localhost:8000"
-	@echo
-	@echo "After performing the above, point your browser to http://localhost:8000"
+server::
+	uwsgi -H ~/.virtualenvs/HotelUrbano-desafiohu1 --ini uwsgi.ini
 
-.PHONY=frontend
-frontend::
-	(cd frontend && python -m http.server)
+import_data::
+	python backend/data.py
 
-.PHONY=backend
-backend::
-	python runbackend.py
-
-.PHONY=index
 index::
-	curl -XDELETE http://localhost:9200/cheermeapp; echo;
-	curl -XPOST http://localhost:9200/cheermeapp -d @mapping.json; echo
+	curl -XDELETE http://localhost:9200/desafiohu1; echo;
+	curl -XPOST http://localhost:9200/desafiohu1 -d @mapping.json; echo
 	curl -XPOST http://localhost:9200/_bulk --data-binary @data/beers.data; echo
 
