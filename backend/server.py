@@ -19,6 +19,7 @@ class ESResource(Resource):
         for hit in data['hits']['hits']:
             result = hit['_source']
             result['id'] = hit['_id']
+            result['type'] = hit['_type']
             results.append(result)
         return results
 

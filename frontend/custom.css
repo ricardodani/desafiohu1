@@ -66,6 +66,33 @@
 .hotels_form .form .button .fa {
     color: white;
 }
+.hotels_form .autocomplete {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.hotels_form .autocomplete li {
+    list-style: none;
+    color: #666;
+    font-size: 16px;
+    font-weight: 200;
+    padding: 10px;
+}
+.hotels_form .autocomplete li:hover {
+    background-color: #eee;
+}
+.hotels_form .autocomplete li:before {
+    color: #ff7900;
+    font-family: 'FontAwesome';
+    letter-spacing: 10px;
+}
+.hotels_form .autocomplete li.hotel:before {
+    content: '\f236';
+}
+.hotels_form .autocomplete li.city:before {
+    content: '\f015';
+    margin-left: 2px;
+}
 .hotels_list th {
     min-width: 80px;
 }

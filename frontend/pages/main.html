@@ -10,8 +10,8 @@
                 <div class="popover bottom" ng-show="places_results.length">
                     <div class="arrow"></div>
                     <div class="popover-content">
-                        <ul ng-repeat="result in places_results">
-                            <li>{{ result.name }}</li>
+                        <ul ng-repeat="result in places_results" class="autocomplete">
+                            <li class="{{ result.type }}">{{ result.name }}</li>
                         </ul>
                     </div>
                 </div>
