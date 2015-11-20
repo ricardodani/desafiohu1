@@ -25,7 +25,7 @@ class ESResource(Resource):
 
 class HotelAvailability(ESResource):
 
-    url = config.es_base_url['hotel']
+    url = config.es_base_url+ '/hotel/_search'
 
     def parse_args(self):
         parser.add_argument('cityId')
@@ -37,7 +37,7 @@ class HotelAvailability(ESResource):
     def get_date_range(self):
         enter_date = self.args['enterDate']
         exit_date = self.args['exitDate']
-        return ['2011-11-10']
+        return ['26/05/2015', '27/05/2015', '30/05/2015']
 
     def get(self):
         self.parse_args()
@@ -53,14 +53,15 @@ class HotelAvailability(ESResource):
         }
         resp = requests.post(self.url, data=json.dumps(query))
         return self.handle_result(resp.json())
+api.add_resource(HotelAvailability, config.base_url+'hotel')
 
 
 class Places(ESResource):
 
-    url = config.es_base_url['places']
+    url = config.es_base_url + '/city,hotel/_search'
 
     def parse_args(self):
-        parser.add_argument('searchString')
+        parser.add_argument('searchString', default='')
         self.args = parser.parse_args()
 
     def get(self):
@@ -69,16 +70,15 @@ class Places(ESResource):
             "query": {
                 "multi_match": {
                     "fields": ["name", "city"],
-                    "query": self.args['searchString'],
+                    "query": self.args.get('searchString'),
                     "type": "cross_fields",
-                    "use_dis_max": False
+                    "use_dis_max": False,
+                    "operator": "and"
                 }
             },
             "size": 100
         }
+        print json.dumps(query)
         resp = requests.post(self.url, data=json.dumps(query))
         return self.handle_result(resp.json())
-
-
-api.add_resource(HotelAvailability, config.api_base_url+'/hotel')
-api.add_resource(Places, config.api_base_url+'/places')
+api.add_resource(Places, config.base_url+'places')

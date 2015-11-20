@@ -2,12 +2,12 @@ var myApp = angular.module("myApp", ["ngRoute", "ngResource", "myApp.services"])
 var services = angular.module("myApp.services", ["ngResource"])
 services
 .factory('Places', function($resource) {
-    return $resource('http://localhost:5000/api/v1/places', {searchString: '@searchString'}, {
+    return $resource('http://localhost:5000/places', {searchString: '@searchString'}, {
         query: { method: 'GET', isArray: true}
     });
 })
 .factory('Hotel', function($resource) {
-    return $resource('http://localhost:5000/api/v1/hotel', {
+    return $resource('http://localhost:5000/hotel', {
         enterDate: '@enterDate', exitDate: '@exitDate', undefinedDate: '@undefinedDate'}, {
         query: { method: 'GET', isArray: true}
     });

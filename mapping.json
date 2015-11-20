@@ -34,7 +34,9 @@
         },
         "styles": {
             "properties": {
-                "name": {"type": "string", "index": "not_analyzed"},
+                "name": {
+                    "type": "string", "index": "not_analyzed", "boost": 2
+                },
                 "parent":{"type": "string", "index": "not_analyzed"}
             }
         }

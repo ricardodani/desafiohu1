@@ -26,20 +26,14 @@
         "hotel": {
             "properties": {
                 "name": {"type": "string", "index_analyzer": "autocomplete", "search_analyzer": "standard"},
-                "city": {"type": "string", "index_analyzer": "autocomplete", "search_analyzer": "standard"}
+                "city": {"type": "string", "index_analyzer": "autocomplete", "search_analyzer": "standard"},
+                "city_id": {"type": "string", "index": "not_analyzed"},
+                "available_days": {"type": "date", "index": "not_analyzed", "format": "dd/MM/yyyy"}
             }
         },
         "city": {
             "properties": {
                 "name": {"type": "string", "index_analyzer": "autocomplete", "search_analyzer": "standard"}
-            }
-        },
-        "disp": {
-            "properties": {
-                "date": {"type": "date", "index_analyzer": "autocomplete", "search_analyzer": "standard"},
-                "available": {"type": "boolean", "index": "not_analyzed"},
-                "hotelId": {"type": "string", "index": "not_analyzed"},
-                "cityId": {"type": "string", "index": "not_analyzed"}
             }
         }
     }
