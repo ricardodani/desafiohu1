@@ -78,6 +78,9 @@
     font-weight: 200;
     padding: 10px;
 }
+.hotels_form .autocomplete small {
+    color: #333;
+}
 .hotels_form .autocomplete li:hover {
     background-color: #eee;
 }

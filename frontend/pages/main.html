@@ -6,12 +6,12 @@
             <label for="local_search">Quer ficar onde?</label>
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa-map-marker fa"></i></span>
-                <input type="text" class="form-control" id="local_search" ng-model="searchString" placeholder='Cidade ou hotel' ng-change="places()"/>
-                <div class="popover bottom" ng-show="places_results.length">
+                <input type="text" class="form-control" id="local_search" ng-focus="focus=true" ng-blur="focus=false" ng-model="searchString" placeholder='Cidade ou hotel' ng-change="places()"/>
+                <div class="popover bottom" ng-show="places_results.length && focus">
                     <div class="arrow"></div>
                     <div class="popover-content">
-                        <ul ng-repeat="result in places_results" class="autocomplete">
-                            <li class="{{ result.type }}">{{ result.name }}</li>
+                        <ul class="autocomplete">
+                            <li ng-repeat="result in places_results" class="{{ result.type }}">{{ result.name }} <small ng-if="result.city">- {{ result.city }}</small></li>
                         </ul>
                     </div>
                 </div>

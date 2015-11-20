@@ -31,6 +31,8 @@ myApp.controller(
                 $scope.places_results = Places.query({
                     searchString: searchString
                 });
+            } else {
+                $scope.places_results = [];
             }
         };
         $scope.hotels = function() {

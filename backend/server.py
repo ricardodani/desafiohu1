@@ -77,7 +77,7 @@ class Places(ESResource):
                     "operator": "and"
                 }
             },
-            "size": 100
+            "size": 10
         }
         print json.dumps(query)
         resp = requests.post(self.url, data=json.dumps(query))
