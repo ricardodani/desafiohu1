@@ -68,6 +68,9 @@ class Places(ESResource):
     def get(self):
         self.parse_args()
         query = {
+            "sort" : [
+                { "_type" : "asc" }, "_score"
+            ],
             "query": {
                 "multi_match": {
                     "fields": ["name", "city"],

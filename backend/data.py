@@ -34,13 +34,23 @@ def add_city(name):
     )))
     return resp.json()['_id']
 
-def add_hotel(name, disp, city, city_id):
+def add_hotel(name, city):
     url = config.es_base_url + '/hotel'
     json_data = json.dumps(dict(
         name=name,
-        available_days=[x[0] for x in disp if x[1] == '1'],
         city=city,
-        city_id=city_id
+    ))
+    resp = requests.post(url, data=json_data)
+    return resp.json()['_id']
+
+def add_disp(hotel_id, hotel_name, city_id, city_name, disp):
+    url = config.es_base_url + '/disp'
+    json_data = json.dumps(dict(
+        hotel_id=hotel_id,
+        hotel_name=hotel_name,
+        city_id=city_id,
+        city_name=city_name,
+        dates=[x[0] for x in disp if x[1] == '1'],
     ))
     resp = requests.post(url, data=json_data)
     return resp.json()['_id']
@@ -50,7 +60,8 @@ def main():
     for city in import_data:
         city_id = add_city(city)
         for hotel in import_data[city]:
-            add_hotel(hotel['name'], hotel['disp'], city, city_id)
+            hotel_id = add_hotel(hotel['name'], city)
+            add_disp(hotel_id, hotel['name'], city_id, city, hotel['disp'])
 
 if __name__ == '__main__':
     main()
