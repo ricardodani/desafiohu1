@@ -35,7 +35,9 @@ myApp.config(function($routeProvider) {
 myApp.controller(
     'mainController',
     function ($scope, Places, Disp) {
+        $scope.showResults = false;
         $scope.places = function() {
+            $scope.searchHappened = true;
             searchString = $scope.searchString;
             if (searchString.length > 1) {
                 $scope.places_results = Places.query({
@@ -53,6 +55,7 @@ myApp.controller(
                 exitDate: $scope.exitDate,
                 undefinedDate: $scope.undefinedDate
             });
+            $scope.showResults = true;
         };
         $scope.setPlaceValue = function(value) {
             $scope.searchString = value.name;
