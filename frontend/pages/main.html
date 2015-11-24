@@ -6,12 +6,14 @@
             <label for="local_search">Quer ficar onde?</label>
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa-map-marker fa"></i></span>
-                <input type="text" class="form-control" id="local_search" ng-focus="focus=true" ng-blur="focus=false" ng-model="searchString" placeholder='Cidade ou hotel' ng-change="places()"/>
+                <input type="text" class="form-control" id="local_search" ng-focus="focus=true" ng-model="searchString" placeholder='Cidade ou hotel' ng-change="places()"/>
+                <input type="hidden" ng-model="cityId" placeholder='Cidade ou hotel' ng-change="places()"/>
+                <input type="hidden" ng-model="placeId" placeholder='Cidade ou hotel' ng-change="places()"/>
                 <div class="popover bottom" ng-show="places_results.length && focus">
                     <div class="arrow"></div>
                     <div class="popover-content">
                         <ul class="autocomplete">
-                            <li ng-repeat="result in places_results" class="{{ result.type }}">{{ result.name }} <small ng-if="result.city">- {{ result.city }}</small></li>
+                            <li ng-repeat="result in places_results" ng-click="setPlaceValue(result)" class="{{ result.type }}">{{ result.name }} <small ng-if="result.city">- {{ result.city }}</small></li>
                         </ul>
                     </div>
                 </div>
@@ -50,7 +52,8 @@
             </div>
         </span>
         <span class="col-xs-12 button">
-            <button ng-click="hotels()"><i class="fa fa-search"></i> Buscar</button>
+            <button ng-disabled="!(placeId && placeType && ((enterDate && exitDate) || undefinedDate))"
+                ng-click="hotels()"><i class="fa fa-search"></i> Buscar</button>
         </span>
     </div>
 </div>
@@ -60,14 +63,14 @@
 <table class="hotels_list table table-striped table-condensed">
     <thead>
     <tr>
-        <th>Hotel</th><th>Cidade</th><th>Disponibilidade</th>
+        <th>Dia</th><th>Hotel</th><th>Cidade</th>
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="result in hotel_results">
+    <tr ng-repeat="result in disponibilities">
+        <td>{{ result.date }}</td>
         <td>{{ result.name }}</td>
         <td>{{ result.city }}</td>
-        <td>{{ result.available_days }}</td>
     </tr>
     </tbody>
 </table>

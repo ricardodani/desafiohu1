@@ -63,6 +63,9 @@
     padding: 15px;
     font-size: 20px;
 }
+.hotels_form .button button:disabled {
+    background-color: #aaa;
+}
 .hotels_form .form .button .fa {
     color: white;
 }

@@ -6,10 +6,10 @@ services
         query: { method: 'GET', isArray: true}
     });
 })
-.factory('Hotel', function($resource) {
-    return $resource('http://localhost:5000/hotel', {
-        hotelId: '@hotelId',
-        cityId: '@cityId',
+.factory('Disp', function($resource) {
+    return $resource('http://localhost:5000/disp', {
+        placeId: '@placeId',
+        placeType: '@placeType',
         enterDate: '@enterDate',
         exitDate: '@exitDate',
         undefinedDate: '@undefinedDate'
@@ -24,12 +24,17 @@ myApp.config(function($routeProvider) {
         templateUrl: 'pages/main.html',
         controller: 'mainController'
     })
+})
+.config(function($datepickerProvider) {
+  angular.extend($datepickerProvider.defaults, {
+    dateFormat: 'dd/MM/yyyy',
+    startWeek: 1
+  });
 });
-
 
 myApp.controller(
     'mainController',
-    function ($scope, Places, Hotel) {
+    function ($scope, Places, Disp) {
         $scope.places = function() {
             searchString = $scope.searchString;
             if (searchString.length > 1) {
@@ -41,13 +46,19 @@ myApp.controller(
             }
         };
         $scope.hotels = function() {
-            if ($scope.enterDate && $scope.exitDate) {
-                $scope.hotel_results = Hotel.query({
-                    enterDate: $scope.enterDate,
-                    exitDate: $scope.exitDate,
-                    undefinedDate: $scope.undefinedDate
-                });
-            }
+            $scope.disponibilities = Disp.query({
+                placeId: $scope.placeId,
+                placeType: $scope.placeType,
+                enterDate: $scope.enterDate,
+                exitDate: $scope.exitDate,
+                undefinedDate: $scope.undefinedDate
+            });
+        };
+        $scope.setPlaceValue = function(value) {
+            $scope.searchString = value.name;
+            $scope.placeId = value.id;
+            $scope.placeType = value.type;
+            $scope.places_results = [];
         };
     }
 );

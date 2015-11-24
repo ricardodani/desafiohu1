@@ -2,37 +2,54 @@ from flask import Flask
 from flask_restful import reqparse, Resource, Api
 from flask.ext.cors import CORS
 from flask.ext.pymongo import PyMongo
+from bson import json_util
 import requests
 import config
 import json
+import dateutil.parser
+
 
 app = Flask(__name__)
 app.config['MONGO_DBNAME'] = config.mongo_db_name
+mongo = PyMongo(app)
 CORS(app)
 api = Api(app)
-mongo = PyMongo(app)
 parser = reqparse.RequestParser()
 
 
 class HotelAvailability(Resource):
 
     def parse_args(self):
-        parser.add_argument('cityId')
-        parser.add_argument('hotelId')
+        parser.add_argument('placeId')
+        parser.add_argument('placeType')
         parser.add_argument('enterDate')
         parser.add_argument('exitDate')
-        parser.add_argument('undefinedDates')
+        parser.add_argument('undefinedDate')
         self.args = parser.parse_args()
 
-    def get_data(self):
-        if self.args.get('undefinedDates'):
-            disps = mongo.db.disps.find(
-                {'available': True}
-            )
+    def get_query(self):
+        query = dict(available=True)
+        if self.args.get('placeType') == 'city':
+            query.update(city_id=self.args.get('placeId'))
+        else:
+            query.update(hotel_id=self.args.get('placeId'))
+        if not self.args.get('undefinedDate') == 'true':
+            enterDate = dateutil.parser.parse(self.args['enterDate'])
+            exitDate = dateutil.parser.parse(self.args['exitDate'])
+            query.update(date={'$gte': enterDate, '$lte': exitDate})
+        print query
+        return query
 
     def get(self):
         self.parse_args()
-        return self.get_data()
+        query = self.get_query()
+        result = mongo.db.disp.find(query)
+        return [{
+            'name': r['hotel_name'],
+            'city': r['city_name'],
+            'date': r['date'].strftime('%d/%m/%Y')
+        } for r in result]
+
 api.add_resource(HotelAvailability, config.base_url+'disp')
 
 
@@ -70,6 +87,7 @@ class Places(Resource):
             },
             "size": 10
         }
+        print json.dumps(query)
         resp = requests.post(self.url, data=json.dumps(query))
         return self.handle_result(resp.json())
 api.add_resource(Places, config.base_url+'places')
