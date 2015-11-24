@@ -36,8 +36,7 @@ class HotelAvailability(Resource):
         if not self.args.get('undefinedDate') == 'true':
             enterDate = dateutil.parser.parse(self.args['enterDate'])
             exitDate = dateutil.parser.parse(self.args['exitDate'])
-            query.update(date={'$gte': enterDate, '$lte': exitDate})
-        print query
+            query.update(date={'$gte': enterDate, '$lt': exitDate})
         return query
 
     def get(self):
@@ -87,7 +86,6 @@ class Places(Resource):
             },
             "size": 10
         }
-        print json.dumps(query)
         resp = requests.post(self.url, data=json.dumps(query))
         return self.handle_result(resp.json())
 api.add_resource(Places, config.base_url+'places')

@@ -11,7 +11,9 @@ A interface em anexo precisa ser implementada assim como o backend para consumir
 1. git clone http://github.com/ricardodani/desafiohu1
 2. cd desafiohu1
 3. make setup
-4. make run
+3. make import_data
+4. make server
+5. make run_frontend
 
 Esses comandos tem que ser o suficiente para configurar meu mac os x OU ubuntu e rodar seu programa. Pode considerar que eu tenho instalado no meu sistema Python, Java, PHP, Ruby e/ou Node. Qualquer outra dependência que eu precisar vc tem que prover.
 
