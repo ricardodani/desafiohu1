@@ -1,5 +1,5 @@
 setup::
-	@pip install -r requirements
+	@pip install -r requirements.txt
 
 dev_server::
 	@python backend/__init__.py
