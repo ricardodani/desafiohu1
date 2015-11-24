@@ -1,18 +1,39 @@
-from flask import Flask, render_template
+from flask import Flask
 from flask_restful import reqparse, Resource, Api
 from flask.ext.cors import CORS
+from flask.ext.pymongo import PyMongo
 import requests
 import config
 import json
 
 app = Flask(__name__)
+app.config['MONGO_DBNAME'] = config.mongo_db_name
 CORS(app)
 api = Api(app)
-
+mongo = PyMongo(app)
 parser = reqparse.RequestParser()
 
 
-class ESResource(Resource):
+class HotelAvailability(Resource):
+
+    def parse_args(self):
+        parser.add_argument('cityId')
+        parser.add_argument('hotelId')
+        parser.add_argument('enterDate')
+        parser.add_argument('exitDate')
+        parser.add_argument('undefinedDates')
+        self.args = parser.parse_args()
+
+    def get(self):
+        self.parse_args()
+        disps = mongo.db.disps.find({'available': True})
+        return disps
+api.add_resource(HotelAvailability, config.base_url+'disp')
+
+
+class Places(Resource):
+
+    url = config.es_base_url + '/city,hotel/_search'
 
     def handle_result(self, data):
         results = []
@@ -23,67 +44,6 @@ class ESResource(Resource):
             results.append(result)
         return results
 
-
-class HotelAvailability(ESResource):
-
-    url = config.es_base_url+ '/hotel/_search'
-
-    def parse_args(self):
-        parser.add_argument('cityId')
-        parser.add_argument('enterDate')
-        parser.add_argument('exitDate')
-        parser.add_argument('undefinedDates')
-        self.args = parser.parse_args()
-
-    def get_date_range(self):
-        enter_date = self.args['enterDate']
-        exit_date = self.args['exitDate']
-        return ['26/05/2015', '27/05/2015', '30/05/2015']
-
-    def get(self):
-        self.parse_args()
-        query = {
-            "query": {
-                "match": {
-                    "available_days": {
-                        "query": self.get_date_range(),
-                        "operator": "and"
-                    }
-                }
-            }
-        }
-        # GET desafiohu1/disp/_search
-        # {
-        # "query": {
-        #     "filtered": {
-        #     "filter": {
-        #         "bool": {
-        #         "must": [
-        #             {
-        #                 "term": {
-        #                 "city_id": ["AVEjnt8sJTFSUzSrG34f"]
-        #                 }
-        #             },
-        #             {
-        #                 "term": {
-        #                 "dates": ["3/5/2015", "4/5/2015", "5/5/2015", "6/5/2015", "7/5/2015", "8/5/2015"]
-        #                 }
-        #             }
-        #         ]
-        #         }
-        #     }
-        #     }
-        # }
-        # }
-        resp = requests.post(self.url, data=json.dumps(query))
-        return self.handle_result(resp.json())
-api.add_resource(HotelAvailability, config.base_url+'hotel')
-
-
-class Places(ESResource):
-
-    url = config.es_base_url + '/city,hotel/_search'
-
     def parse_args(self):
         parser.add_argument('searchString', default='')
         self.args = parser.parse_args()
@@ -91,8 +51,8 @@ class Places(ESResource):
     def get(self):
         self.parse_args()
         query = {
-            "sort" : [
-                { "_type" : "asc" }, "_score"
+            "sort": [
+                {"_type": "asc"}, "_score"
             ],
             "query": {
                 "multi_match": {

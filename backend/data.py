@@ -1,6 +1,7 @@
 import requests
 import config
 import json
+from server import app, mongo
 
 def get_disps():
     disps = {}
@@ -43,17 +44,21 @@ def add_hotel(name, city):
     resp = requests.post(url, data=json_data)
     return resp.json()['_id']
 
-def add_disp(hotel_id, hotel_name, city_id, city_name, disp):
-    url = config.es_base_url + '/disp'
-    json_data = json.dumps(dict(
-        hotel_id=hotel_id,
-        hotel_name=hotel_name,
-        city_id=city_id,
-        city_name=city_name,
-        dates=[x[0] for x in disp if x[1] == '1'],
-    ))
-    resp = requests.post(url, data=json_data)
-    return resp.json()['_id']
+def add_disp(hotel_id, hotel_name, city_id, city_name, disps):
+    with app.app_context():
+        results =  mongo.db.disp.insert_many([
+            {
+                'hotel_id': hotel_id,
+                'hotel_name': hotel_name,
+                'city_id': city_id,
+                'city_name': city_name,
+                'date': disp[0],
+                'available': disp[1] == 1
+            } for disp in disps
+        ])
+        print 'Inserted %d disponibilities on %s - %s' % (
+            len(results.inserted_ids), hotel_name, city_name
+        )
 
 def main():
     import_data = get_places(get_disps())

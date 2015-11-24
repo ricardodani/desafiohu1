@@ -1,6 +1,3 @@
 base_url = '/'
 es_base_url = 'http://localhost:9200/desafiohu1'
-#es_base_url = {
-    #'places': 'http://localhost:9200/desafiohu1/city,hotel',
-    #'hotels': 'http://localhost:9200/desafiohu1/hotel',
-#}
+mongo_db_name = 'desafiohu1'
