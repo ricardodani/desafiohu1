@@ -24,10 +24,15 @@ class HotelAvailability(Resource):
         parser.add_argument('undefinedDates')
         self.args = parser.parse_args()
 
+    def get_data(self):
+        if self.args.get('undefinedDates'):
+            disps = mongo.db.disps.find(
+                {'available': True}
+            )
+
     def get(self):
         self.parse_args()
-        disps = mongo.db.disps.find({'available': True})
-        return disps
+        return self.get_data()
 api.add_resource(HotelAvailability, config.base_url+'disp')
 
 
@@ -65,7 +70,6 @@ class Places(Resource):
             },
             "size": 10
         }
-        print json.dumps(query)
         resp = requests.post(self.url, data=json.dumps(query))
         return self.handle_result(resp.json())
 api.add_resource(Places, config.base_url+'places')

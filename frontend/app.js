@@ -1,4 +1,4 @@
-var myApp = angular.module("myApp", ["ngRoute", "ngResource", "myApp.services"]);
+var myApp = angular.module("myApp", ["ngRoute", "ngResource", "myApp.services", 'mgcrea.ngStrap']);
 var services = angular.module("myApp.services", ["ngResource"])
 services
 .factory('Places', function($resource) {
@@ -8,7 +8,12 @@ services
 })
 .factory('Hotel', function($resource) {
     return $resource('http://localhost:5000/hotel', {
-        enterDate: '@enterDate', exitDate: '@exitDate', undefinedDate: '@undefinedDate'}, {
+        hotelId: '@hotelId',
+        cityId: '@cityId',
+        enterDate: '@enterDate',
+        exitDate: '@exitDate',
+        undefinedDate: '@undefinedDate'
+    }, {
         query: { method: 'GET', isArray: true}
     });
 });

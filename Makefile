@@ -10,5 +10,5 @@ server::
 import_data::
 	@curl -XDELETE http://localhost:9200/desafiohu1; echo;
 	@curl -XPOST http://localhost:9200/desafiohu1 -d @mappings.json; echo
+	@mongo desafiohu1 --eval "db.dropDatabase()"
 	@python backend/data.py
-

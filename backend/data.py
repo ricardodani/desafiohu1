@@ -1,6 +1,7 @@
 import requests
 import config
 import json
+from datetime import datetime
 from server import app, mongo
 
 def get_disps():
@@ -52,8 +53,8 @@ def add_disp(hotel_id, hotel_name, city_id, city_name, disps):
                 'hotel_name': hotel_name,
                 'city_id': city_id,
                 'city_name': city_name,
-                'date': disp[0],
-                'available': disp[1] == 1
+                'date': datetime.strptime(disp[0], '%d/%m/%Y'),
+                'available': disp[1] == '1'
             } for disp in disps
         ])
         print 'Inserted %d disponibilities on %s - %s' % (
